@@ -26,3 +26,12 @@ graph of queries to each root server with:
 ./bin/qpm-all ipchange-.pcap > times
 gnuplot graph2.p
 ```
+
+
+## Random notes
+
+If stuff gets in a bad state, this can usually clean it up:
+```
+sudo pkill pdns
+sudo mn
+```
