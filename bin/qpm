@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+tcpdump -r $1 -n -tt 'dst '$2 | cut -d' ' -f1 | $DIR/bucket 60

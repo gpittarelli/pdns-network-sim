@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+tmpfiles=`mktemp -d`
+
+./bin/qpm $1 10.0.1.1 > $tmpfiles/a
+./bin/qpm $1 10.0.1.2 > $tmpfiles/b
+./bin/qpm $1 10.0.1.3 > $tmpfiles/c
+./bin/qpm $1 10.0.1.4 > $tmpfiles/d
+./bin/qpm $1 10.0.2.4 > $tmpfiles/d2
+./bin/qpm $1 10.0.1.5 > $tmpfiles/e
+./bin/qpm $1 10.0.1.6 > $tmpfiles/f
+./bin/qpm $1 10.0.1.7 > $tmpfiles/g
+./bin/qpm $1 10.0.1.8 > $tmpfiles/h
+./bin/qpm $1 10.0.1.9 > $tmpfiles/i
+./bin/qpm $1 10.0.1.10 > $tmpfiles/j
+./bin/qpm $1 10.0.1.11 > $tmpfiles/k
+./bin/qpm $1 10.0.1.12 > $tmpfiles/l
+./bin/qpm $1 10.0.1.13 > $tmpfiles/m
+
+cut -d' ' -f1 $tmpfiles/* | sort -g | uniq > $tmpfiles/times
+
+for l in {a,b,c,d,d2,e,f,g,h,i,j,k,l,m}; do
+  join -j 1 -o '0,2.2' -a1 -e '0' --nocheck-order $tmpfiles/times $tmpfiles/$l > $tmpfiles/${l}.2
+done
+
+join -j1 -e '-' -a1 -o auto --nocheck-order $tmpfiles/times $tmpfiles/a.2 > $tmpfiles/out
+join -j1 -e '-' -a1 -o auto --nocheck-order $tmpfiles/out $tmpfiles/b.2 > $tmpfiles/out2
+join -j1 -e '-' -a1 -o auto --nocheck-order $tmpfiles/out2 $tmpfiles/c.2 > $tmpfiles/out3
+join -j1 -e '-' -a1 -o auto --nocheck-order $tmpfiles/out3 $tmpfiles/d.2 > $tmpfiles/out4
+join -j1 -e '-' -a1 -o auto --nocheck-order $tmpfiles/out4 $tmpfiles/d2.2 > $tmpfiles/out5
+join -j1 -e '-' -a1 -o auto --nocheck-order $tmpfiles/out5 $tmpfiles/e.2 > $tmpfiles/out6
+join -j1 -e '-' -a1 -o auto --nocheck-order $tmpfiles/out6 $tmpfiles/f.2 > $tmpfiles/out7
+join -j1 -e '-' -a1 -o auto --nocheck-order $tmpfiles/out7 $tmpfiles/g.2 > $tmpfiles/out8
+join -j1 -e '-' -a1 -o auto --nocheck-order $tmpfiles/out8 $tmpfiles/h.2 > $tmpfiles/out9
+join -j1 -e '-' -a1 -o auto --nocheck-order $tmpfiles/out9 $tmpfiles/i.2 > $tmpfiles/out10
+join -j1 -e '-' -a1 -o auto --nocheck-order $tmpfiles/out10 $tmpfiles/j.2 > $tmpfiles/out11
+join -j1 -e '-' -a1 -o auto --nocheck-order $tmpfiles/out11 $tmpfiles/k.2 > $tmpfiles/out12
+join -j1 -e '-' -a1 -o auto --nocheck-order $tmpfiles/out12 $tmpfiles/l.2 > $tmpfiles/out13
+join -j1 -e '-' -a1 -o auto --nocheck-order $tmpfiles/out13 $tmpfiles/m.2 > $tmpfiles/out14
+
+cat $tmpfiles/out14
+
+rm -rf $tmpfiles

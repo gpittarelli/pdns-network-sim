@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+binsize=$1
+if [ $# -eq 0 ]
+then
+    binsize=1
+fi
+
+sed 's/$/\/'$binsize'*'$binsize'/' | bc | sort -g | uniq -c | sed 's/^ *//g' | awk '{print $2, $1}'
