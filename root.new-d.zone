@@ -1,5 +1,5 @@
-$TTL 180 
-@ IN SOA a.root-servers.net. a.b.c. (2017010101 1 1 1 1)
+$TTL 180
+@ IN SOA a.root-servers.net. a.b.c. (2017102900 1 1 1 1)
 
 .                        3600000      NS    A.ROOT-SERVERS.NET.
 A.ROOT-SERVERS.NET.      3600000      A     10.0.1.1
@@ -11,7 +11,7 @@ B.ROOT-SERVERS.NET.      3600000      A     10.0.1.2
 C.ROOT-SERVERS.NET.      3600000      A     10.0.1.3
 
 .                        3600000      NS    D.ROOT-SERVERS.NET.
-D.ROOT-SERVERS.NET.      3600000      A     10.0.1.4
+D.ROOT-SERVERS.NET.      3600000      A     10.0.2.4
 
 .                        3600000      NS    E.ROOT-SERVERS.NET.
 E.ROOT-SERVERS.NET.      3600000      A     10.0.1.5
