@@ -12,21 +12,24 @@ from mininet.link import TCLink
 from mininet.node import OVSController
 from mininet.util import dumpNodeConnections, pmonitor
 
-def int2dpid( dpid ):
-   try:
-      dpid = hex( dpid )[ 2: ]
-      dpid = '0' * ( 16 - len( dpid ) ) + dpid
-      return dpid
-   except IndexError:
-      raise Exception('Unable to derive default datapath ID - '
-                      'please either specify a dpid or use a '
-		                  'canonical switch name such as s23.')
+
+def int2dpid(dpid):
+    try:
+        dpid = hex(dpid)[2:]
+        dpid = '0' * (16 - len(dpid)) + dpid
+        return dpid
+    except IndexError:
+        raise Exception('Unable to derive default datapath ID - '
+                        'please either specify a dpid or use a '
+                        'canonical switch name such as s23.')
+
 
 # https://stackoverflow.com/a/7001371/922613
 def char_range(c1, c2):
     """Generates the characters from `c1` to `c2`, inclusive."""
     for c in xrange(ord(c1), ord(c2)+1):
         yield chr(c)
+
 
 # Define our simulated root servers. Note that d and d2 should have
 # similar, worse-than-average latencies. The rest of the servers can
@@ -53,6 +56,7 @@ roots = {
     'l':  {'latency': 50,   'ip': '10.0.1.12'},
     'm':  {'latency': 50,   'ip': '10.0.1.13'}
 }
+
 
 class PdnsTopo(Topo):
     "Network topology to repro potential pdns NS selection bug"
@@ -82,7 +86,7 @@ class PdnsTopo(Topo):
 
 # Export the main topology, so it can be tested with, eg:
 #   sudo mn --custom ~/topo.py --topo pdns --test pingall --link tc
-topos = { 'pdns': ( lambda: PdnsTopo() ) }
+topos = {'pdns': (lambda: PdnsTopo())}
 
 
 def runExperiment(net):
@@ -125,53 +129,6 @@ def runExperiment(net):
         "--dont-query="
     )
 
-
-
-def testPdns():
-    epoch = time.time()
-    pcapOut = "ipchange-{}.pcap".format(epoch)
-    shutil.copy("/etc/powerdns/root.orig.zone", "/etc/powerdns/root.zone")
-
-    topo = PdnsTopo()
-    net = Mininet(
-        topo=topo,
-        link=TCLink,
-        controller=OVSController
-    )
-
-    net.start()
-
-    print("Dumping host connections")
-    dumpNodeConnections(net.hosts)
-
-    client, recursor = net.get('client', 'recursor')
-    rootServers = {
-        letter: net.get('root-{}'.format(letter))
-        for letter, _ in roots.items()
-    }
-
-    print("Launching root servers")
-    serverProcesses = {}
-    for letter, server in rootServers.items():
-        print("Launching root {} on: {}".format(letter, server.IP()))
-
-        serverProcesses[server] = server.popen(
-            "/usr/sbin/pdns_server",
-            "--allow-recursion=no",
-            "--socket-dir=root-{}".format(letter),
-            "--local-address={}".format(server.IP()),
-            "--launch=bind",
-            "--bind-config=/etc/powerdns/bind.conf"
-        )
-
-    print("Launching recursor server")
-    serverProcesses[recursor] = recursor.popen(
-        "/usr/sbin/pdns_recursor",
-        "--local-address={}".format(recursor.IP()),
-        "--hint-file=named.root",
-        "--dont-query="
-    )
-
     print("Starting tcpdump")
     tcpdump = recursor.popen("/usr/sbin/tcpdump", "port 53", "-w", pcapOut)
 
@@ -179,9 +136,11 @@ def testPdns():
     time.sleep(2)
 
     print("Starting query traffic")
-    client.cmd(
-        "while true; do dig @{} asdf$(date +%s%N).; done > /tmp/date.out &".format(recursor.IP())
-    )
+    client.cmd("""
+      while true; do
+        dig @{} asdf$(date +%s%N).
+      done  > /tmp/date.out &
+      """.format(recursor.IP()))
 
     # Length of experiment:
 #    time.sleep(10 * 60)
@@ -218,9 +177,20 @@ def testPdns():
     for _, p in serverProcesses.items():
         p.terminate()
 
-    net.stop()
-
     print("Experiment done. Analyze: {}".format(pcapOut))
+
+
+def testPdns():
+    topo = PdnsTopo()
+    net = Mininet(
+        topo=topo,
+        link=TCLink,
+        controller=OVSController
+    )
+
+    net.start()
+    runExperiment(net)
+    net.stop()
 
 if __name__ == '__main__':
     testPdns()
