@@ -23,7 +23,11 @@ sudo ./topo.py
 `topo.py` will create an `ipchange-<>.pcap` file. You can generate a
 graph of queries to each root server with:
 ```
-./bin/qpm-all ipchange-.pcap > times
+./bin/qpm-all ipchange-{}.pcap > times
+
+# update "pcap" line at start of graph2.p
+$EDITOR graph2.p
+
 gnuplot graph2.p
 ```
 
