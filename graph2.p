@@ -1,7 +1,14 @@
-pcap="ipchange-1509259779.58.pcap"
+pcap="ipchange-1509328629.75.pcap"
+
+set terminal png enhanced size 1280,720 font "Arial" 20
+set output 'qpm.png'
+
 set ylabel "Queries per minute"
-set xlabel "time"
-set title "PowerDNS Root Server Query Distribution"
+set xlabel "Time"
+set title "PowerDNS Root Server Queries (".pcap.")"
+set key outside
+
+set logscale y
 
 set xdata time
 set timefmt "%s"
@@ -11,17 +18,17 @@ set xtics rotate
 set datafile missing '-'
 
 plot "./times" \
-     u 1:2 w l title "a-root", \
-  "" u 1:3 w l title "b-root", \
-  "" u 1:4 w l title "c-root", \
-  "" u 1:5 w l title "d-root", \
-  "" u 1:6 w l title "d2-root", \
-  "" u 1:7 w l title "e-root", \
-  "" u 1:8 w l title "f-root", \
-  "" u 1:9 w l title "g-root", \
-  "" u 1:10 w l title "h-root", \
-  "" u 1:11 w l title "i-root", \
-  "" u 1:12 w l title "j-root", \
-  "" u 1:13 w l title "k-root", \
-  "" u 1:14 w l title "l-root", \
-  "" u 1:15 w l title "m-root"
+     u 1:2 w l title "a-root" lw 2, \
+  "" u 1:3 w l title "b-root" lw 2, \
+  "" u 1:4 w l title "c-root" lw 2, \
+  "" u 1:5 w l title "d-root" lw 4, \
+  "" u 1:6 w l title "d2-root" lw 4 lc rgb "green", \
+  "" u 1:7 w l title "e-root" lw 2, \
+  "" u 1:8 w l title "f-root" lw 2, \
+  "" u 1:9 w l title "g-root" lw 2, \
+  "" u 1:10 w l title "h-root" lw 2, \
+  "" u 1:11 w l title "i-root" lw 2, \
+  "" u 1:12 w l title "j-root" lw 2, \
+  "" u 1:13 w l title "k-root" lw 2, \
+  "" u 1:14 w l title "l-root" lw 2, \
+  "" u 1:15 w l title "m-root" lw 2
