@@ -35,3 +35,12 @@ If stuff gets in a bad state, this can usually clean it up:
 sudo pkill pdns
 sudo mn
 ```
+
+## data
+
+2 sample runs are provided. `data/ipchange-1509315001.32.pcap.gz` is a
+full run, but the new d-root had lower latency than the other roots,
+so pinning to it was actually correct (though probing still
+stopped). `data/ipchange-1509328629.75.pcap.gz` is a better run that
+also demonstrates the pinning and the new d-root had a worse than
+average latency, so overall qps goes down.
