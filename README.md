@@ -31,6 +31,26 @@ $EDITOR graph2.p
 gnuplot graph2.p
 ```
 
+## Using pdns master
+
+```
+# build dependencies:
+sudo apt-get install git build-essential dh-autoreconf pkg-config bison flex libssl-dev ragel libboost-all-dev virtualenv lua5.2 lua5.2-dev
+
+git clone https://github.com/PowerDNS/pdns.git
+cd pdns
+
+./bootstrap
+./configure --build=x86_64-linux-gnu --prefix=/usr --includedir=${prefix}/include --mandir=${prefix}/share/man --infodir=${prefix}/share/info --sysconfdir=/etc --localstatedir=/var --disable-silent-rules --libdir=${prefix}/lib/x86_64-linux-gnu --libexecdir=${prefix}/lib/x86_64-linux-gnu --disable-maintainer-mode --disable-dependency-tracking --sysconfdir=/etc/powerdns --enable-reproducible --with-modules="bind"
+make
+
+cd pdns/recursordist/
+./bootstrap
+./configure
+make
+
+# edit topo.py to point the recursor node at ./pdns/pdns/recursordist/pdns_recursor
+```
 
 ## Random notes
 

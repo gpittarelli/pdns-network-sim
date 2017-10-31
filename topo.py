@@ -122,6 +122,7 @@ def runExperiment(net):
         )
 
     print("Launching recursor server")
+    # use "./pdns/pdns/recursordist/pdns_recursor" for master build
     serverProcesses[recursor] = recursor.popen(
         "/usr/sbin/pdns_recursor",
         "--local-address={}".format(recursor.IP()),
@@ -143,8 +144,8 @@ def runExperiment(net):
       """.format(recursor.IP()))
 
     # Length of experiment:
-#    time.sleep(10 * 60)
     print("Waiting for some baseline traffic...")
+#    time.sleep(10)
     time.sleep(10 * 60)
 
     # d-root IP address switchover
@@ -165,6 +166,7 @@ def runExperiment(net):
     ))
 
     print("Waiting for switchover to be picked up...")
+#    time.sleep(3)
     time.sleep(3 * 60 * 60)
 
     print("Stopping query traffic")
