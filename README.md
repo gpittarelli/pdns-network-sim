@@ -67,4 +67,6 @@ full run, but the new d-root had lower latency than the other roots,
 so pinning to it was actually correct (though probing still
 stopped). `data/ipchange-1509328629.75.pcap.gz` is a better run that
 also demonstrates the pinning and the new d-root had a worse than
-average latency, so overall qps goes down.
+average latency, so overall qps goes
+down. `data/ipchange-1509475279.91.pcap.gz` is the same, but with pdns
+master.

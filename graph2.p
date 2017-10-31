@@ -1,11 +1,12 @@
-pcap="ipchange-1509328629.75.pcap"
+pcap="ipchange-1509475279.91.pcap"
+sha="e5d68d9fd"
 
 set terminal png enhanced size 1280,720 font "Arial" 20
 set output 'qpm.png'
 
 set ylabel "Queries per minute"
 set xlabel "Time"
-set title "PowerDNS Root Server Queries (".pcap.")"
+set title "PowerDNS Root Server Queries (".pcap.") (pdns ".sha.")"
 set key outside
 
 set logscale y
